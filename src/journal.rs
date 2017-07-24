@@ -255,10 +255,10 @@ impl Journal {
     }
 
     /// Returns timestamp at which current journal is recorded
-    pub fn timestamp(&self) -> Result<time::SystemTime> {
+    pub fn timestamp(&self) -> Result<u64> {
         let mut timestamp_us: u64 = 0;
         sd_try!(ffi::sd_journal_get_realtime_usec(self.j, &mut timestamp_us));
-        Ok(system_time_from_realtime_usec(timestamp_us))
+        Ok(timestamp_us)
     }
 
     /// Adds a match by which to filter the entries of the journal.
