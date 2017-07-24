@@ -219,7 +219,7 @@ impl Journal {
 
     /// Seek to a specific position in journal. On success, returns a cursor
     /// to the current entry.
-    pub fn seek(&mut self, seek: JournalSeek) -> Result<String> {
+    pub fn seek(&mut self, seek: JournalSeek) -> Result<()> {
         match seek {
             JournalSeek::Head => sd_try!(ffi::sd_journal_seek_head(self.j)),
             JournalSeek::Current => 0,
@@ -239,15 +239,8 @@ impl Journal {
                 sd_try!(ffi::sd_journal_seek_cursor(self.j, c.as_ptr()))
             }
         };
-        let c: *mut c_char = ptr::null_mut();
-        if unsafe { ffi::sd_journal_get_cursor(self.j, &c) != 0 } {
-            // Cursor may need to be re-aligned on a real entry first.
-            sd_try!(ffi::sd_journal_next(self.j));
-            sd_try!(ffi::sd_journal_get_cursor(self.j, &c));
-        }
-        let cs = unsafe { MString::from_raw(c) };
-        let cs = try!(cs.or(Err(io::Error::new(InvalidData, "invalid cursor"))));
-        Ok(cs.to_string())
+
+        Ok(())
     }
 
     /// Returns the cursor of current journal entry
