@@ -13,7 +13,7 @@ include = ["Cargo.toml", "**/*.rs", "README.md" ]
 bus = ["libsystemd-sys/bus"]
 
 [dependencies]
-log = "0.*"
+log = "0.3.*"
 libc = "0.*"
 utf8-cstr = "0.*"
 mbox = "0.*"
